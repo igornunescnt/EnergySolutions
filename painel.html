@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-10">
+
+<h1 class="text-3xl font-bold mb-6">📋 Contatos</h1>
+
+<button onclick="logout()" class="mb-4 bg-red-500 text-white px-4 py-2 rounded">
+  Sair
+</button>
+
+<div id="lista" class="grid gap-4"></div>
+
+<script>
+if (!localStorage.getItem("token")) {
+  window.location.href = "login.html";
+}
+
+async function carregar() {
+  const res = await fetch("http://localhost:3001/contatos", {
+    headers: {
+      Authorization: localStorage.getItem("token")
+    }
+  });
+
+  const contatos = await res.json();
+
+  const lista = document.getElementById("lista");
+
+  lista.innerHTML = "";
+
+  contatos.reverse().forEach(c => {
+    lista.innerHTML += `
+      <div class="bg-white p-5 rounded shadow">
+        <h2 class="font-bold">${c.nome}</h2>
+        <p>${c.telefone}</p>
+        <p>${c.mensagem}</p>
+        <p class="text-sm text-gray-500">${new Date(c.data).toLocaleString()}</p>
+      </div>
+    `;
+  });
+}
+
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "login.html";
+}
+
+carregar();
+</script>
+
+</body>
+</html>

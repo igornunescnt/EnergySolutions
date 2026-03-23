@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serviços Elétricos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="font-sans bg-gray-50">
+
+<!-- HEADER -->
+<header class="bg-black text-white p-5 flex justify-between items-center">
+  <h1 class="font-bold text-2xl">Energy<span class="text-yellow-400">Solutions</span> </h1>
+  <div>
+    <a href="login.html" class="bg-yellow-400 text-black px-4 py-2 rounded font-semibold">
+      Login
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="bg-gradient-to-r from-black to-gray-800 text-white text-center py-20 px-5">
+  <h2 class="text-3xl md:text-5xl font-bold leading-tight">
+    Serviços Elétricos com Segurança e Qualidade
+  </h2>
+  <p class="mt-4 text-lg">
+    Atendimento rápido, profissional qualificado e garantia de serviço.
+  </p>
+
+  <a href="#" class="mt-8 inline-block bg-yellow-400 text-black px-8 py-4 rounded font-bold text-lg shadow-lg hover:scale-105 transition">
+    Solicitar Orçamento
+  </a>
+</section>
+
+<!-- SERVIÇOS -->
+<section class="py-16 px-5 max-w-6xl mx-auto">
+  <h2 class="text-3xl font-bold text-center mb-10">Nossos Serviços</h2>
+
+  <div class="grid md:grid-cols-3 gap-8">
+
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
+      <h3 class="font-bold text-xl mb-2">Instalação Elétrica</h3>
+      <img src="img/infraestrutura-eletrica-industrial.jpeg" alt="Instalação Elétrica" class="w-full h-48 object-cover mb-4">
+      <p>Projetos completos para residências e empresas.</p>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
+      <h3 class="font-bold text-xl mb-2">Manutenção</h3>
+      <img src="img/manutencao-eletrica.jpg" alt="Manutenção Elétrica" class="w-full h-48 object-cover mb-4">
+      <p>Correção rápida e segura de falhas elétricas.</p>
+    </div>
+
+    <div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
+      <h3 class="font-bold text-xl mb-2">Quadros Elétricos</h3>
+      <img src="img/painel-eletrico-manutech.jpg" alt="Quadros Elétricos" class="w-full h-48 object-cover mb-4">
+      <p>Organização e proteção do seu sistema elétrico.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section class="bg-black text-white py-16 text-center">
+  <h2 class="text-3xl font-bold mb-8">Por que escolher a gente?</h2>
+
+  <div class="flex flex-col md:flex-row justify-center gap-10">
+
+    <div>
+      <p class="text-yellow-400 text-2xl">✔</p>
+      <p>Atendimento rápido</p>
+    </div>
+
+    <div>
+      <p class="text-yellow-400 text-2xl">✔</p>
+      <p>Profissional qualificado</p>
+    </div>
+
+    <div>
+      <p class="text-yellow-400 text-2xl">✔</p>
+      <p>Garantia de serviço</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="py-16 px-5 bg-gray-100">
+  <h2 class="text-3xl font-bold text-center mb-10">Clientes satisfeitos</h2>
+
+  <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+
+    <div class="bg-white p-6 rounded shadow">
+      ⭐⭐⭐⭐⭐
+      <p class="mt-2">Serviço rápido e excelente qualidade!</p>
+    </div>
+
+    <div class="bg-white p-6 rounded shadow">
+      ⭐⭐⭐⭐⭐
+      <p class="mt-2">Profissional muito responsável, recomendo.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="bg-yellow-400 text-center py-20">
+  <h2 class="text-3xl font-bold mb-10">
+    Precisa de um eletricista agora?
+  </h2>
+
+  <a href="#" class="bg-black text-white px-8 py-4 rounded text-lg font-bold shadow hover:scale-105 transition">
+    Falar no WhatsApp
+  </a>
+</section>
+
+<!--FORMULARIO-->
+<section class="bg-yellow-400 text-center py-16">
+  <h2 class="text-3xl font-bold mb-6">Solicite um orçamento</h2>
+
+  <form id="formContato" class="max-w-md mx-auto flex flex-col gap-4">
+    <input type="text" id="nome" placeholder="Seu nome" class="p-3 rounded" required>
+    <input type="text" id="telefone" placeholder="Seu telefone" class="p-3 rounded" required>
+    <textarea id="mensagem" placeholder="Descreva o serviço" class="p-3 rounded"></textarea>
+
+    <button type="submit" class="bg-black text-white py-3 rounded font-bold">
+      Enviar
+    </button>
+  </form>
+
+  <p id="status" class="mt-4 font-semibold"></p>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-black text-white text-center p-5">
+  <p>© 2026 EnergySolutions - Todos os direitos reservados</p>
+</footer>
+
+<script>
+document.getElementById("formContato").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const nome = document.getElementById("nome").value;
+  const telefone = document.getElementById("telefone").value;
+  const mensagem = document.getElementById("mensagem").value;
+
+  const resposta = await fetch("http://localhost:3001/contato", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ nome, telefone, mensagem })
+  });
+
+  const data = await resposta.json();
+
+  document.getElementById("status").innerText = data.message;
+});
+</script>
+
+</body>
+</html>
