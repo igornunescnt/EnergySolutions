@@ -1,4 +1,5 @@
-# ⚡ EnergySolutions: LANDING PAGE COM CAPTAÇÃO DE CLIENTES
+# ⚡ EnergySolutions 
+Landing page com captação de leads via formulário.
 
 Este projeto é um sistema completo com:
 - Landing page profissional
