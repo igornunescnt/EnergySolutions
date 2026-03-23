@@ -68,6 +68,6 @@ app.get("/contatos", (req, res) => {
 });
 
 // 🚀 START
-app.listen(3001, () => {
-  console.log("Rodando em http://localhost:3001");
+app.listen(3001, "0.0.0.0", () => {
+  console.log("Servidor rodando");
 });

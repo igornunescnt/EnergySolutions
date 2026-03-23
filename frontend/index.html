@@ -144,7 +144,7 @@ document.getElementById("formContato").addEventListener("submit", async (e) => {
   const telefone = document.getElementById("telefone").value;
   const mensagem = document.getElementById("mensagem").value;
 
-  const resposta = await fetch("http://localhost:3001/contato", {
+  const resposta = await fetch("https://energysolutions-12af.onrender.com/contato", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
