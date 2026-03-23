@@ -1,5 +1,15 @@
-# ⚡ EnergySolutions 
-Landing page com captação de leads via formulário.
+<h1 align="center">⚡ EnergySolutions - Sistema de Captação de Clientes</h1>
+
+<p align="center">
+  💻 Sistema fullstack com landing page, formulário e painel administrativo
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20JS-blue">
+  <img src="https://img.shields.io/badge/Backend-Node.js-green">
+  <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow">
+  <img src="https://img.shields.io/badge/Deploy-Online-success">
+</p>
 
 Este projeto é um sistema completo com:
 - Landing page profissional
