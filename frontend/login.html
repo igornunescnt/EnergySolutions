@@ -45,6 +45,7 @@ document.getElementById("loginForm").addEventListener("submit", async (event) =>
     window.location.href = "painel.html";
   } catch (error) {
     message.textContent = error.message || "Não foi possível conectar ao servidor.";
+document.getElementById("senha").value = "";
   } finally {
     button.disabled = false;
   }

@@ -12,7 +12,7 @@ const crypto = require("crypto");
 
 const app = express();
 const PORT = Number(process.env.PORT || 3001);
-const DATA_FILE = path.join(__dirname, "dados.json");
+const DATA_FILE = process.env.CONTACTS_FILE || path.join(__dirname, "dados.json");
 
 const requiredEnv = ["ADMIN_EMAIL", "ADMIN_PASSWORD_HASH", "JWT_SECRET", "FRONTEND_ORIGINS"];
 for (const key of requiredEnv) {
@@ -56,14 +56,16 @@ const contactLimiter = rateLimit({
 });
 
 function readContacts() {
-  try {
-    if (!fs.existsSync(DATA_FILE)) return [];
-    const content = fs.readFileSync(DATA_FILE, "utf8");
-    const parsed = JSON.parse(content);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
+  if (!fs.existsSync(DATA_FILE)) return [];
+
+  const content = fs.readFileSync(DATA_FILE, "utf8");
+  const parsed = JSON.parse(content);
+
+  if (!Array.isArray(parsed)) {
+    throw new Error("Arquivo de contatos possui formato inválido.");
   }
+
+  return parsed;
 }
 
 function writeContacts(contacts) {
@@ -154,13 +156,17 @@ app.use((err, _req, res, _next) => {
   if (err.message === "Origem não autorizada pelo CORS.") {
     return res.status(403).json({ error: "Origem não autorizada." });
   }
+
+  if (err.type === "entity.too.large") {
+    return res.status(413).json({ error: "Requisição muito grande." });
+  }
+
+  if (err.type === "entity.parse.failed") {
+    return res.status(400).json({ error: "JSON inválido." });
+  }
+
+  console.error("Erro interno:", err);
   return res.status(500).json({ error: "Erro interno do servidor." });
 });
-
-if (require.main === module) {
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`EnergySolutions API ativa na porta ${PORT}`);
-  });
-}
 
 module.exports = app;

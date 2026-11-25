@@ -8,6 +8,7 @@ node_modules/
 
 # Local contact data
 backend/dados.json
+jwt/
 
 # Logs and runtime files
 *.log
