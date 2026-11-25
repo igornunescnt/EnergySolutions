@@ -169,4 +169,10 @@ app.use((err, _req, res, _next) => {
   return res.status(500).json({ error: "Erro interno do servidor." });
 });
 
+if (require.main === module) {
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`EnergySolutions API ativa na porta ${PORT}`);
+  });
+}
+
 module.exports = app;
