@@ -2,48 +2,54 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login administrativo | EnergySolutions</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
-<body class="flex items-center justify-center h-screen bg-gray-100">
-
-<div class="bg-white p-8 rounded shadow w-80">
-  <h1 class="text-2xl font-bold mb-4 text-center">Login</h1>
-
-  <input id="email" type="email" placeholder="Email" class="w-full p-2 mb-3 border rounded">
-  <input id="senha" type="password" placeholder="Senha" class="w-full p-2 mb-4 border rounded">
-
-  <button onclick="login()" class="w-full bg-black text-white py-2 rounded">
-    Entrar
-  </button>
-
-  <p id="msg" class="text-red-500 mt-2 text-center"></p>
-</div>
-
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+  <main class="w-80 rounded bg-white p-8 shadow">
+    <h1 class="mb-4 text-center text-2xl font-bold">Acesso administrativo</h1>
+    <form id="loginForm">
+      <label class="mb-1 block" for="email">Email</label>
+      <input id="email" type="email" autocomplete="username" required class="mb-3 w-full rounded border p-2">
+      <label class="mb-1 block" for="senha">Senha</label>
+      <input id="senha" type="password" autocomplete="current-password" required class="mb-4 w-full rounded border p-2">
+      <button id="submitButton" type="submit" class="w-full rounded bg-black py-2 text-white">Entrar</button>
+    </form>
+    <p id="msg" role="alert" class="mt-3 text-center text-red-600"></p>
+  </main>
 <script>
-async function login() {
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value;
+const API_URL = "https://energysolutions-12af.onrender.com";
 
-  const res = await fetch("https://energysolutions-12af.onrender.com/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ email, senha })
-  });
+document.getElementById("loginForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const button = document.getElementById("submitButton");
+  const message = document.getElementById("msg");
+  button.disabled = true;
+  message.textContent = "";
 
-  const data = await res.json();
-
-  if (data.autorizado) {
+  try {
+    const response = await fetch(`${API_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: document.getElementById("email").value,
+        senha: document.getElementById("senha").value
+      })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.autorizado) {
+      throw new Error(data.error || "Email ou senha inválidos.");
+    }
     localStorage.setItem("token", data.token);
     window.location.href = "painel.html";
-  } else {
-    document.getElementById("msg").innerText = "Login inválido";
+  } catch (error) {
+    message.textContent = error.message || "Não foi possível conectar ao servidor.";
+document.getElementById("senha").value = "";
+  } finally {
+    button.disabled = false;
   }
-}
+});
 </script>
-
 </body>
 </html>

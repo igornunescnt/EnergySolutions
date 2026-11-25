@@ -2,57 +2,75 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Painel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel administrativo | EnergySolutions</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
-<body class="bg-gray-100 p-10">
-
-<h1 class="text-3xl font-bold mb-6">📋 Contatos</h1>
-
-<button onclick="logout()" class="mb-4 bg-red-500 text-white px-4 py-2 rounded">
-  Sair
-</button>
-
-<div id="lista" class="grid gap-4"></div>
-
+<body class="bg-gray-100 p-6 md:p-10">
+  <header class="mb-6 flex items-center justify-between">
+    <h1 class="text-3xl font-bold">Contatos recebidos</h1>
+    <button id="logoutButton" class="rounded bg-red-600 px-4 py-2 text-white">Sair</button>
+  </header>
+  <p id="status" role="status" class="mb-4"></p>
+  <main id="lista" class="grid gap-4"></main>
 <script>
-if (!localStorage.getItem("token")) {
-  window.location.href = "login.html";
-}
-
-async function carregar() {
-  const res = await fetch("https://energysolutions-12af.onrender.com/contatos", {
-    headers: {
-      Authorization: localStorage.getItem("token")
-    }
-  });
-
-  const contatos = await res.json();
-
-  const lista = document.getElementById("lista");
-
-  lista.innerHTML = "";
-
-  contatos.reverse().forEach(c => {
-    lista.innerHTML += `
-      <div class="bg-white p-5 rounded shadow">
-        <h2 class="font-bold">${c.nome}</h2>
-        <p>${c.telefone}</p>
-        <p>${c.mensagem}</p>
-        <p class="text-sm text-gray-500">${new Date(c.data).toLocaleString()}</p>
-      </div>
-    `;
-  });
-}
+const API_URL = "https://energysolutions-12af.onrender.com";
+const token = localStorage.getItem("token");
 
 function logout() {
   localStorage.removeItem("token");
   window.location.href = "login.html";
 }
+document.getElementById("logoutButton").addEventListener("click", logout);
 
-carregar();
+if (!token) {
+  logout();
+} else {
+  carregar();
+}
+
+async function carregar() {
+  const status = document.getElementById("status");
+  try {
+    const response = await fetch(`${API_URL}/contatos`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (response.status === 401 || response.status === 403) {
+      logout();
+      return;
+    }
+    if (!response.ok) throw new Error("Não foi possível carregar os contatos.");
+
+    const contatos = await response.json();
+    const lista = document.getElementById("lista");
+    lista.replaceChildren();
+
+    if (!contatos.length) {
+      status.textContent = "Nenhum contato recebido.";
+      return;
+    }
+
+    contatos.slice().reverse().forEach((contato) => {
+      const card = document.createElement("article");
+      card.className = "rounded bg-white p-5 shadow";
+      const nome = document.createElement("h2");
+      nome.className = "font-bold";
+      nome.textContent = contato.nome || "";
+      const telefone = document.createElement("p");
+      telefone.textContent = contato.telefone || "";
+      const mensagem = document.createElement("p");
+      mensagem.textContent = contato.mensagem || "";
+      const data = document.createElement("p");
+      data.className = "mt-2 text-sm text-gray-500";
+      data.textContent = contato.data ? new Date(contato.data).toLocaleString() : "";
+      card.append(nome, telefone, mensagem, data);
+      lista.append(card);
+    });
+    status.textContent = "";
+  } catch (error) {
+    status.textContent = error.message || "Erro ao carregar os contatos.";
+  }
+}
 </script>
-
 </body>
 </html>

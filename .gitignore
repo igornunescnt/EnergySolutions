@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local contact data
+backend/dados.json
+jwt/
+
+# Logs and runtime files
+*.log
+npm-debug.log*
+.DS_Store

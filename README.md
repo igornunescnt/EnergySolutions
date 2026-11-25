@@ -1,176 +1,79 @@
-<h1 align="center">⚡ EnergySolutions - Sistema de Captação de Clientes</h1>
+# EnergySolutions
 
-<p align="center">
-  💻 Sistema fullstack com landing page, formulário e painel administrativo
-</p>
+Sistema demonstrativo de captação de contatos para serviços elétricos, com landing page, API Node.js e painel administrativo.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20JS-blue">
-  <img src="https://img.shields.io/badge/Backend-Node.js-green">
-  <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow">
-  <img src="https://img.shields.io/badge/Deploy-Online-success">
-</p>
+> **Status de segurança:** a versão antiga utilizava credenciais e token fixos. Esta branch substitui essa implementação. Mantenha o serviço hospedado suspenso até configurar as variáveis de ambiente e validar os testes.
 
-Este projeto é um sistema completo com:
-- Landing page profissional
-- Formulário de contato funcional
-- Backend com Node.js
-- Armazenamento em JSON
-- Painel administrativo com login
+## Tecnologias
 
----
+- Frontend: HTML, Tailwind CSS e JavaScript
+- Backend: Node.js 20+, Express
+- Segurança: bcryptjs, JWT, Helmet, CORS com allowlist e rate limiting
+- Armazenamento atual: arquivo JSON local (apenas demonstração)
 
-## 🚀 Tecnologias utilizadas
+## Estrutura
 
-### Frontend
-- HTML
-- TailwindCSS
-- JavaScript
+```text
+backend/
+  server.js
+  package.json
+  .env.example
+frontend/
+  index.html
+  login.html
+  painel.html
+.gitignore
+```
 
-### Backend
-- Node.js
-- Express
-- CORS
-- File System (fs)
+## Configuração local
 
----
+1. Instale Node.js 20 ou superior.
+2. Entre em `backend/` e execute `npm install`.
+3. Copie `.env.example` para `.env`.
+4. Gere um hash bcrypt para a senha administrativa:
 
-## 📁 Estrutura do projeto
+```bash
+node -e "require('bcryptjs').hash(process.argv[1], 12).then(console.log)" "SUA_SENHA_FORTE"
+```
 
+5. Preencha `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH`, `JWT_SECRET` e `FRONTEND_ORIGINS` no arquivo `.env`.
+6. Gere um segredo JWT com:
 
-eletrica-system/
-├── backend/
-│ ├── server.js
-│ └── dados.json
-└── frontend/
-├── index.html
-├── login.html
-└── painel.html
+```bash
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+```
 
+7. Inicie a API com `npm start`.
 
----
+Nunca envie o arquivo `.env` ao GitHub.
 
-## 🔧 Como rodar o projeto
+## Variáveis de ambiente
 
-### 1. Clonar o repositório
+| Variável | Finalidade |
+|---|---|
+| `PORT` | Porta fornecida pelo host (padrão local: 3001) |
+| `ADMIN_EMAIL` | Email administrativo |
+| `ADMIN_PASSWORD_HASH` | Hash bcrypt da senha administrativa |
+| `JWT_SECRET` | Segredo aleatório com pelo menos 32 caracteres |
+| `FRONTEND_ORIGINS` | Origens autorizadas, separadas por vírgula |
 
+No Render, configure essas variáveis em Environment. Não use os valores de exemplo como segredos reais.
 
-git clone https://github.com/seu-usuario/eletrica-system.git
+## Endpoints
 
+- `GET /health`: verificação de disponibilidade.
+- `POST /login`: autentica o administrador e retorna JWT com validade de 2 horas.
+- `POST /contato`: rota pública do formulário, com validação e limite de requisições.
+- `GET /contatos`: rota administrativa protegida por `Authorization: Bearer <token>`.
 
----
+## Limitações conhecidas
 
-### 2. Rodar o backend
+O arquivo JSON não é armazenamento adequado para produção e pode ser perdido em reinicializações ou novos deploys em hosts com filesystem efêmero. Antes de uso real, migre os contatos para PostgreSQL, implemente backup e monitore erros. O token no navegador usa localStorage; uma arquitetura de produção deve preferir cookie Secure, HttpOnly e SameSite com proteção CSRF.
 
+## Segurança
 
-cd backend
-npm install
-node server.js
-
-
-Servidor rodando em:
-http://localhost:3001
-
----
-
-### 3. Rodar o frontend
-
-Abra o arquivo:
-
-
-frontend/login.html
-
-
----
-
-## 🔐 Acesso ao sistema
-
-
-Email: admin@email.com
-
-Senha: 123456
-
-
----
-
-## 📩 Funcionalidades
-
-- Cadastro de contatos via formulário
-- Armazenamento em arquivo JSON
-- Login de administrador
-- Visualização dos contatos em painel
-- Proteção de rotas com token simples
-
----
-
-## 🌐 API
-
-### 🔑 Login
-
-POST /login
-
-
-{
-"email": "admin@email.com
-",
-"senha": "123456"
-}
-
-
----
-
-### 📩 Enviar contato
-
-POST /contato
-
-
-{
-"nome": "teste",
-"telefone": "61999999999",
-"mensagem": "Preciso de instalação elétrica"
-}
-
-
----
-
-### 📋 Listar contatos
-
-GET /contatos
-
-Headers:
-
-Authorization: 123
-
-
----
-
-## ⚠️ Observações
-
-- Este projeto utiliza autenticação simples (token fixo)
-- Não é recomendado para produção sem melhorias de segurança
-
----
-
-## 🚀 Melhorias futuras
-
-- Autenticação com JWT
-- Banco de dados (MongoDB)
-- Envio de email automático
-- Integração com WhatsApp
-- Deploy completo
-
----
-
-## 💰 Objetivo do projeto
-
-Este sistema foi desenvolvido para:
-- Aprendizado prático de fullstack
-- Criação de portfólio profissional
-- Base para venda de serviços web
-
----
-
-## 👨‍💻 Autor
-
-Ygor Vinícius Pereira Nunes  
-Desenvolvedor Web 🚀
+- Não existem credenciais padrão documentadas.
+- Segredos são fornecidos por variáveis de ambiente.
+- O painel renderiza os dados com `textContent` para evitar injeção de HTML.
+- Login e formulário possuem limitação de requisições.
+- CORS aceita somente as origens configuradas.

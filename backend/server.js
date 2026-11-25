@@ -1,73 +1,172 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const fs = require("fs");
+const path = require("path");
+const crypto = require("crypto");
 
 const app = express();
+const PORT = Number(process.env.PORT || 3001);
+const DATA_FILE = process.env.CONTACTS_FILE || path.join(__dirname, "dados.json");
 
-app.use(cors());
-app.use(express.json());
-
-// 👤 usuário fixo
-const usuario = {
-  email: "admin@email.com",
-  senha: "123456"
-};
-
-// 🔐 LOGIN
-app.post("/login", (req, res) => {
-  const { email, senha } = req.body;
-
-  if (email === usuario.email && senha === usuario.senha) {
-    return res.json({ autorizado: true, token: "123" });
+const requiredEnv = ["ADMIN_EMAIL", "ADMIN_PASSWORD_HASH", "JWT_SECRET", "FRONTEND_ORIGINS"];
+for (const key of requiredEnv) {
+  if (!process.env[key]) {
+    throw new Error(`Variável de ambiente obrigatória ausente: ${key}`);
   }
+}
 
-  res.status(401).json({ autorizado: false });
+if (process.env.JWT_SECRET.length < 32) {
+  throw new Error("JWT_SECRET deve ter pelo menos 32 caracteres.");
+}
+
+const allowedOrigins = process.env.FRONTEND_ORIGINS.split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.disable("x-powered-by");
+app.use(helmet());
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error("Origem não autorizada pelo CORS."));
+  }
+}));
+app.use(express.json({ limit: "10kb" }));
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Muitas tentativas. Tente novamente em 15 minutos." }
 });
 
-// 📩 SALVAR CONTATO
-app.post("/contato", (req, res) => {
-  const { nome, telefone, mensagem } = req.body;
+const contactLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Muitos envios. Tente novamente mais tarde." }
+});
 
-  const novo = {
+function readContacts() {
+  if (!fs.existsSync(DATA_FILE)) return [];
+
+  const content = fs.readFileSync(DATA_FILE, "utf8");
+  const parsed = JSON.parse(content);
+
+  if (!Array.isArray(parsed)) {
+    throw new Error("Arquivo de contatos possui formato inválido.");
+  }
+
+  return parsed;
+}
+
+function writeContacts(contacts) {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(contacts, null, 2), { mode: 0o600 });
+}
+
+function authenticateToken(req, res, next) {
+  const [scheme, token] = (req.headers.authorization || "").split(" ");
+  if (scheme !== "Bearer" || !token) {
+    return res.status(401).json({ error: "Autenticação necessária." });
+  }
+
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET, {
+      issuer: "energysolutions-api",
+      audience: "energysolutions-admin"
+    });
+    return next();
+  } catch {
+    return res.status(401).json({ error: "Sessão inválida ou expirada." });
+  }
+}
+
+app.get("/health", (_req, res) => {
+  res.json({ status: "ok" });
+});
+
+app.post("/login", loginLimiter, async (req, res) => {
+  const email = typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : "";
+  const password = typeof req.body?.senha === "string" ? req.body.senha : "";
+
+  if (!email || !password || email.length > 254 || password.length > 200) {
+    return res.status(400).json({ error: "Informe email e senha válidos." });
+  }
+
+  const emailMatches = email === process.env.ADMIN_EMAIL.trim().toLowerCase();
+  const passwordMatches = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH);
+
+  if (!emailMatches || !passwordMatches) {
+    return res.status(401).json({ error: "Email ou senha inválidos." });
+  }
+
+  const token = jwt.sign(
+    { sub: email, role: "admin" },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "2h",
+      issuer: "energysolutions-api",
+      audience: "energysolutions-admin"
+    }
+  );
+
+  return res.json({ autorizado: true, token, expiresIn: 7200 });
+});
+
+// Rota pública do formulário: validação e limite de envios; não exige login do visitante.
+app.post("/contato", contactLimiter, (req, res) => {
+  const nome = typeof req.body?.nome === "string" ? req.body.nome.trim() : "";
+  const telefone = typeof req.body?.telefone === "string" ? req.body.telefone.trim() : "";
+  const mensagem = typeof req.body?.mensagem === "string" ? req.body.mensagem.trim() : "";
+
+  if (!nome || nome.length > 100 || !telefone || telefone.length > 30 || mensagem.length > 2000) {
+    return res.status(400).json({ error: "Revise os campos do formulário." });
+  }
+
+  const contacts = readContacts();
+  contacts.push({
+    id: crypto.randomUUID(),
     nome,
     telefone,
     mensagem,
-    data: new Date()
-  };
-
-  fs.readFile("dados.json", "utf8", (err, data) => {
-    let lista = [];
-
-    try {
-      lista = JSON.parse(data);
-    } catch {}
-
-    lista.push(novo);
-
-    fs.writeFile("dados.json", JSON.stringify(lista, null, 2), () => {
-      res.json({ message: "Salvo com sucesso!" });
-    });
+    data: new Date().toISOString()
   });
+
+  try {
+    writeContacts(contacts);
+    return res.status(201).json({ message: "Contato enviado com sucesso." });
+  } catch {
+    return res.status(500).json({ error: "Não foi possível salvar o contato." });
+  }
 });
 
-// 📋 LISTAR CONTATOS (PROTEGIDO)
-app.get("/contatos", (req, res) => {
-  const token = req.headers.authorization;
+app.get("/contatos", authenticateToken, (_req, res) => {
+  return res.json(readContacts());
+});
 
-  if (token !== "123") {
-    return res.status(403).json({ error: "Acesso negado" });
+app.use((err, _req, res, _next) => {
+  if (err.message === "Origem não autorizada pelo CORS.") {
+    return res.status(403).json({ error: "Origem não autorizada." });
   }
 
-  fs.readFile("dados.json", "utf8", (err, data) => {
-    try {
-      res.json(JSON.parse(data));
-    } catch {
-      res.json([]);
-    }
-  });
+  if (err.type === "entity.too.large") {
+    return res.status(413).json({ error: "Requisição muito grande." });
+  }
+
+  if (err.type === "entity.parse.failed") {
+    return res.status(400).json({ error: "JSON inválido." });
+  }
+
+  console.error("Erro interno:", err);
+  return res.status(500).json({ error: "Erro interno do servidor." });
 });
 
-// 🚀 START
-app.listen(3001, "0.0.0.0", () => {
-  console.log("Servidor rodando");
-});
+module.exports = app;
