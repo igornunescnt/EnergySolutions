@@ -3,160 +3,183 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EnergySolutions | Serviços Elétricos</title>
+  <meta name="theme-color" content="#071426">
+  <meta name="description" content="EnergySolutions — soluções elétricas residenciais e comerciais com segurança, qualidade e profissionalismo.">
+  <title>EnergySolutions | Soluções elétricas com confiança</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--navy:#071426;--navy-2:#0d2038;--blue:#163b62;--yellow:#ffc928;--ink:#142238;--muted:#64748b}
+    *{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;color:var(--ink)}
+    h1,h2,h3,.brand{font-family:'Manrope',sans-serif}
+    .hero-grid{background-image:linear-gradient(110deg,rgba(7,20,38,.98) 0%,rgba(7,20,38,.91) 48%,rgba(7,20,38,.45) 100%),url('img/infraestrutura-eletrica-industrial.jpeg');background-size:cover;background-position:center}
+    .eyebrow{letter-spacing:.16em}
+    .service-card{transition:transform .25s ease,box-shadow .25s ease}
+    .service-card:hover{transform:translateY(-6px);box-shadow:0 22px 45px rgba(7,20,38,.12)}
+    .focus-ring:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+  </style>
 </head>
+<body class="bg-slate-50">
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-[#071426]/95 text-white backdrop-blur">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Navegação principal">
+      <a href="#inicio" class="brand text-xl font-extrabold tracking-tight sm:text-2xl">Energy<span class="text-[#ffc928]">Solutions</span><span class="ml-2 align-middle text-[10px] font-semibold uppercase tracking-[.22em] text-slate-400">Elétrica</span></a>
+      <div class="hidden items-center gap-8 text-sm font-semibold text-slate-300 md:flex">
+        <a class="hover:text-white" href="#servicos">Serviços</a>
+        <a class="hover:text-white" href="#diferenciais">Diferenciais</a>
+        <a class="hover:text-white" href="#contato">Contato</a>
+      </div>
+      <a href="login.html" class="focus-ring rounded-full border border-white/20 px-5 py-2.5 text-sm font-bold transition hover:border-[#ffc928] hover:text-[#ffc928]">Área administrativa</a>
+    </nav>
+  </header>
 
-<body class="font-sans bg-gray-50">
+  <main>
+    <section id="inicio" class="hero-grid relative overflow-hidden text-white">
+      <div class="mx-auto grid min-h-[610px] max-w-7xl items-center gap-12 px-5 py-20 lg:grid-cols-[1.15fr_.85fr] lg:px-8 lg:py-28">
+        <div class="max-w-3xl">
+          <p class="eyebrow mb-6 inline-flex items-center gap-3 text-xs font-bold uppercase text-[#ffc928]"><span class="h-px w-9 bg-[#ffc928]"></span> Energia, segurança e confiança</p>
+          <h1 class="text-4xl font-extrabold leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl">Soluções elétricas feitas para <span class="text-[#ffc928]">funcionar.</span></h1>
+          <p class="mt-7 max-w-xl text-lg leading-8 text-slate-300">Instalação, manutenção e infraestrutura elétrica para residências e empresas. Cuidado técnico em cada detalhe, do planejamento à entrega.</p>
+          <div class="mt-10 flex flex-col gap-4 sm:flex-row">
+            <a href="#contato" class="focus-ring inline-flex items-center justify-center rounded-full bg-[#ffc928] px-8 py-4 font-extrabold text-[#071426] shadow-lg shadow-yellow-500/10 transition hover:-translate-y-1 hover:bg-yellow-300">Solicitar orçamento <span class="ml-3 text-xl" aria-hidden="true">↗</span></a>
+            <a href="#servicos" class="focus-ring inline-flex items-center justify-center rounded-full border border-white/25 px-8 py-4 font-bold text-white transition hover:border-white hover:bg-white/10">Conhecer serviços</a>
+          </div>
+          <div class="mt-14 flex flex-wrap gap-x-8 gap-y-3 text-sm font-medium text-slate-300">
+            <span class="flex items-center gap-2"><span class="text-[#ffc928]">✓</span> Atendimento profissional</span>
+            <span class="flex items-center gap-2"><span class="text-[#ffc928]">✓</span> Foco em segurança</span>
+            <span class="flex items-center gap-2"><span class="text-[#ffc928]">✓</span> Soluções sob medida</span>
+          </div>
+        </div>
+        <div class="hidden lg:block">
+          <div class="ml-auto max-w-md rounded-3xl border border-white/15 bg-white/10 p-3 shadow-2xl backdrop-blur-sm">
+            <img src="img/infraestrutura-eletrica-industrial.jpeg" alt="Infraestrutura elétrica profissional" class="h-[390px] w-full rounded-2xl object-cover">
+            <div class="flex items-center justify-between px-4 py-4">
+              <div><p class="text-xs uppercase tracking-widest text-slate-400">Nosso compromisso</p><p class="mt-1 font-bold">Qualidade em cada conexão.</p></div>
+              <span class="grid h-12 w-12 place-items-center rounded-full bg-[#ffc928] text-2xl text-[#071426]" aria-hidden="true">ϟ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="absolute -bottom-24 -right-20 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" aria-hidden="true"></div>
+    </section>
 
-<!-- HEADER -->
-<header class="bg-black text-white p-5 flex justify-between items-center">
-  <h1 class="font-bold text-2xl">Energy<span class="text-yellow-400">Solutions</span> </h1>
-  <div>
-    <a href="login.html" class="bg-yellow-400 text-black px-4 py-2 rounded font-semibold">
-      Login
-    </a>
-  </div>
-</header>
+    <section class="border-b border-slate-200 bg-white">
+      <div class="mx-auto grid max-w-7xl gap-6 px-5 py-8 sm:grid-cols-3 lg:px-8">
+        <div class="flex items-center gap-4"><span class="grid h-11 w-11 place-items-center rounded-xl bg-amber-50 text-xl text-amber-600">ϟ</span><div><p class="font-bold">Instalações</p><p class="text-sm text-slate-500">Projetos e execução</p></div></div>
+        <div class="flex items-center gap-4"><span class="grid h-11 w-11 place-items-center rounded-xl bg-blue-50 text-xl text-blue-700">⌁</span><div><p class="font-bold">Manutenção</p><p class="text-sm text-slate-500">Diagnóstico e reparos</p></div></div>
+        <div class="flex items-center gap-4"><span class="grid h-11 w-11 place-items-center rounded-xl bg-slate-100 text-xl text-slate-700">▦</span><div><p class="font-bold">Infraestrutura</p><p class="text-sm text-slate-500">Organização e proteção</p></div></div>
+      </div>
+    </section>
 
-<!-- HERO -->
-<section class="bg-gradient-to-r from-black to-gray-800 text-white text-center py-20 px-5">
-  <h2 class="text-3xl md:text-5xl font-bold leading-tight">
-    Serviços Elétricos com Segurança e Qualidade
-  </h2>
-  <p class="mt-4 text-lg">
-    Atendimento rápido, profissional qualificado e garantia de serviço.
-  </p>
+    <section id="servicos" class="mx-auto max-w-7xl px-5 py-24 lg:px-8">
+      <div class="mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+        <div><p class="eyebrow text-xs font-extrabold uppercase text-blue-700">O que fazemos</p><h2 class="mt-3 text-3xl font-extrabold tracking-tight text-[#071426] sm:text-4xl">Serviços para sua tranquilidade.</h2></div>
+        <p class="max-w-md leading-7 text-slate-500">Soluções pensadas para manter instalações eficientes, organizadas e seguras em ambientes residenciais e comerciais.</p>
+      </div>
+      <div class="grid gap-7 md:grid-cols-3">
+        <article class="service-card overflow-hidden rounded-2xl border border-slate-200 bg-white">
+          <img src="img/infraestrutura-eletrica-industrial.jpeg" alt="Infraestrutura e instalação elétrica" loading="lazy" class="h-56 w-full object-cover">
+          <div class="p-7"><span class="text-xs font-extrabold uppercase tracking-widest text-blue-700">01 / Instalação</span><h3 class="mt-3 text-xl font-extrabold">Instalação elétrica</h3><p class="mt-3 leading-7 text-slate-500">Projetos e instalações para ambientes residenciais e empresariais, com atenção à funcionalidade e segurança.</p></div>
+        </article>
+        <article class="service-card overflow-hidden rounded-2xl border border-slate-200 bg-white">
+          <img src="img/manutencao-eletrica.jpg" alt="Manutenção de sistemas elétricos" loading="lazy" class="h-56 w-full object-cover">
+          <div class="p-7"><span class="text-xs font-extrabold uppercase tracking-widest text-blue-700">02 / Manutenção</span><h3 class="mt-3 text-xl font-extrabold">Manutenção elétrica</h3><p class="mt-3 leading-7 text-slate-500">Identificação de falhas, correções e manutenção para preservar o bom funcionamento das instalações.</p></div>
+        </article>
+        <article class="service-card overflow-hidden rounded-2xl border border-slate-200 bg-white">
+          <img src="img/painel-eletrico-manutech.jpg" alt="Quadro elétrico organizado" loading="lazy" class="h-56 w-full object-cover">
+          <div class="p-7"><span class="text-xs font-extrabold uppercase tracking-widest text-blue-700">03 / Proteção</span><h3 class="mt-3 text-xl font-extrabold">Quadros elétricos</h3><p class="mt-3 leading-7 text-slate-500">Montagem, organização e adequação de quadros para uma distribuição elétrica mais segura.</p></div>
+        </article>
+      </div>
+    </section>
 
-  <a href="#" class="mt-8 inline-block bg-yellow-400 text-black px-8 py-4 rounded font-bold text-lg shadow-lg hover:scale-105 transition">
-    Solicitar Orçamento
-  </a>
-</section>
+    <section id="diferenciais" class="bg-[#071426] py-24 text-white">
+      <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="max-w-2xl"><p class="eyebrow text-xs font-extrabold uppercase text-[#ffc928]">Por que EnergySolutions</p><h2 class="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">O cuidado está nos detalhes.</h2><p class="mt-5 leading-8 text-slate-300">Mais do que resolver uma demanda elétrica, nosso objetivo é entregar uma experiência clara, organizada e confiável.</p></div>
+        <div class="mt-14 grid gap-10 md:grid-cols-3">
+          <div class="border-t border-white/20 pt-6"><span class="text-3xl text-[#ffc928]">01</span><h3 class="mt-5 text-xl font-bold">Segurança em primeiro lugar</h3><p class="mt-3 leading-7 text-slate-400">Atenção aos procedimentos e às boas práticas em cada etapa do serviço.</p></div>
+          <div class="border-t border-white/20 pt-6"><span class="text-3xl text-[#ffc928]">02</span><h3 class="mt-5 text-xl font-bold">Atendimento transparente</h3><p class="mt-3 leading-7 text-slate-400">Comunicação objetiva para entender sua necessidade e orientar a melhor solução.</p></div>
+          <div class="border-t border-white/20 pt-6"><span class="text-3xl text-[#ffc928]">03</span><h3 class="mt-5 text-xl font-bold">Compromisso com qualidade</h3><p class="mt-3 leading-7 text-slate-400">Organização, cuidado técnico e atenção ao resultado final.</p></div>
+        </div>
+      </div>
+    </section>
 
-<!-- SERVIÇOS -->
-<section class="py-16 px-5 max-w-6xl mx-auto">
-  <h2 class="text-3xl font-bold text-center mb-10">Nossos Serviços</h2>
+    <section class="bg-slate-100 py-20">
+      <div class="mx-auto max-w-5xl px-5 text-center">
+        <p class="eyebrow text-xs font-extrabold uppercase text-blue-700">Vamos conversar</p>
+        <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-[#071426] sm:text-4xl">Seu próximo projeto começa com uma boa conversa.</h2>
+        <p class="mx-auto mt-5 max-w-2xl leading-7 text-slate-500">Conte um pouco sobre o que você precisa. Nossa equipe poderá entender sua solicitação e retornar com as próximas orientações.</p>
+        <a href="#contato" class="mt-8 inline-flex rounded-full bg-[#071426] px-8 py-4 font-bold text-white transition hover:bg-blue-900">Solicitar atendimento <span class="ml-3 text-[#ffc928]">↗</span></a>
+      </div>
+    </section>
 
-  <div class="grid md:grid-cols-3 gap-8">
+    <section id="contato" class="bg-white py-24">
+      <div class="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-[.8fr_1.2fr] lg:px-8">
+        <div>
+          <p class="eyebrow text-xs font-extrabold uppercase text-blue-700">Fale com a gente</p>
+          <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-[#071426] sm:text-4xl">Solicite seu orçamento.</h2>
+          <p class="mt-5 leading-8 text-slate-500">Preencha o formulário com seus dados e uma breve descrição do serviço. Retornaremos assim que possível.</p>
+          <div class="mt-10 rounded-2xl bg-[#071426] p-6 text-white"><span class="text-2xl text-[#ffc928]">ϟ</span><h3 class="mt-3 font-bold">EnergySolutions</h3><p class="mt-2 text-sm leading-6 text-slate-300">Soluções elétricas com foco em segurança, qualidade e confiança.</p></div>
+        </div>
+        <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm sm:p-9">
+          <form id="formContato" class="space-y-5">
+            <div><label for="nome" class="mb-2 block text-sm font-bold text-slate-700">Nome completo</label><input type="text" id="nome" name="nome" autocomplete="name" maxlength="100" placeholder="Como podemos chamar você?" class="focus-ring w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 outline-none transition focus:border-blue-700" required></div>
+            <div><label for="telefone" class="mb-2 block text-sm font-bold text-slate-700">Telefone</label><input type="tel" id="telefone" name="telefone" autocomplete="tel" maxlength="30" placeholder="(00) 00000-0000" class="focus-ring w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 outline-none transition focus:border-blue-700" required></div>
+            <div><label for="mensagem" class="mb-2 block text-sm font-bold text-slate-700">Como podemos ajudar?</label><textarea id="mensagem" name="mensagem" rows="4" maxlength="2000" placeholder="Descreva brevemente o serviço que você precisa..." class="focus-ring w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3.5 outline-none transition focus:border-blue-700"></textarea></div>
+            <button id="submitContato" type="submit" class="focus-ring flex w-full items-center justify-center rounded-xl bg-[#ffc928] px-6 py-4 font-extrabold text-[#071426] transition hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-60">Enviar solicitação <span class="ml-2">↗</span></button>
+            <p id="status" class="text-sm font-semibold" role="status" aria-live="polite"></p>
+            <p class="text-xs leading-5 text-slate-400">Ao enviar, seus dados serão utilizados para retorno sobre esta solicitação.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    <div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
-      <h3 class="font-bold text-xl mb-2">Instalação Elétrica</h3>
-      <img src="img/infraestrutura-eletrica-industrial.jpeg" alt="Instalação Elétrica" class="w-full h-48 object-cover mb-4">
-      <p>Projetos completos para residências e empresas.</p>
+  <footer class="bg-[#050e1b] py-8 text-white">
+    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 text-center sm:flex-row sm:text-left lg:px-8">
+      <a href="#inicio" class="brand text-lg font-extrabold">Energy<span class="text-[#ffc928]">Solutions</span></a>
+      <p class="text-sm text-slate-400">© 2026 EnergySolutions. Todos os direitos reservados.</p>
+      <a href="login.html" class="text-sm text-slate-400 transition hover:text-[#ffc928]">Acesso administrativo</a>
     </div>
-
-    <div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
-      <h3 class="font-bold text-xl mb-2">Manutenção</h3>
-      <img src="img/manutencao-eletrica.jpg" alt="Manutenção Elétrica" class="w-full h-48 object-cover mb-4">
-      <p>Correção rápida e segura de falhas elétricas.</p>
-    </div>
-
-    <div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
-      <h3 class="font-bold text-xl mb-2">Quadros Elétricos</h3>
-      <img src="img/painel-eletrico-manutech.jpg" alt="Quadros Elétricos" class="w-full h-48 object-cover mb-4">
-      <p>Organização e proteção do seu sistema elétrico.</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- DIFERENCIAIS -->
-<section class="bg-black text-white py-16 text-center">
-  <h2 class="text-3xl font-bold mb-8">Por que escolher a gente?</h2>
-
-  <div class="flex flex-col md:flex-row justify-center gap-10">
-
-    <div>
-      <p class="text-yellow-400 text-2xl">✔</p>
-      <p>Atendimento rápido</p>
-    </div>
-
-    <div>
-      <p class="text-yellow-400 text-2xl">✔</p>
-      <p>Profissional qualificado</p>
-    </div>
-
-    <div>
-      <p class="text-yellow-400 text-2xl">✔</p>
-      <p>Garantia de serviço</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- DEPOIMENTOS -->
-<section class="py-16 px-5 bg-gray-100">
-  <h2 class="text-3xl font-bold text-center mb-10">Clientes satisfeitos</h2>
-
-  <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-
-    <div class="bg-white p-6 rounded shadow">
-      ⭐⭐⭐⭐⭐
-      <p class="mt-2">Serviço rápido e excelente qualidade!</p>
-    </div>
-
-    <div class="bg-white p-6 rounded shadow">
-      ⭐⭐⭐⭐⭐
-      <p class="mt-2">Profissional muito responsável, recomendo.</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- CTA FINAL -->
-<section class="bg-yellow-400 text-center py-20">
-  <h2 class="text-3xl font-bold mb-10">
-    Precisa de um eletricista agora?
-  </h2>
-
-  <a href="#" class="bg-black text-white px-8 py-4 rounded text-lg font-bold shadow hover:scale-105 transition">
-    Falar no WhatsApp
-  </a>
-</section>
-
-<!--FORMULARIO-->
-<section class="bg-yellow-400 text-center py-16">
-  <h2 class="text-3xl font-bold mb-6">Solicite um orçamento</h2>
-
-  <form id="formContato" class="max-w-md mx-auto flex flex-col gap-4">
-    <input type="text" id="nome" placeholder="Seu nome" class="m-2 p-3 rounded" required>
-    <input type="text" id="telefone" placeholder="Seu telefone" class="m-2 p-3 rounded" required>
-    <textarea id="mensagem" placeholder="Descreva o serviço" class="m-2 p-3 rounded"></textarea>
-
-    <button type="submit" class="bg-black text-white m-2 py-3 rounded font-bold">
-      Enviar
-    </button>
-  </form>
-
-  <p id="status" class="mt-4 font-semibold"></p>
-</section>
-
-<!-- FOOTER -->
-<footer class="bg-black text-white text-center p-5">
-  <p>© 2026 EnergySolutions - Todos os direitos reservados</p>
-</footer>
+  </footer>
 
 <script>
-document.getElementById("formContato").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const nome = document.getElementById("nome").value;
-  const telefone = document.getElementById("telefone").value;
-  const mensagem = document.getElementById("mensagem").value;
-
-  const resposta = await fetch("https://energysolutions-12af.onrender.com/contato", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ nome, telefone, mensagem })
-  });
-
-  const data = await resposta.json();
-
-  document.getElementById("status").innerText = data.message;
+const API_URL = "https://energysolutions-12af.onrender.com";
+document.getElementById("formContato").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const button = document.getElementById("submitContato");
+  const status = document.getElementById("status");
+  button.disabled = true;
+  button.textContent = "Enviando...";
+  status.textContent = "";
+  status.className = "text-sm font-semibold";
+  const payload = {
+    nome: document.getElementById("nome").value.trim(),
+    telefone: document.getElementById("telefone").value.trim(),
+    mensagem: document.getElementById("mensagem").value.trim()
+  };
+  try {
+    const response = await fetch(`${API_URL}/contato`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || data.message || "Não foi possível enviar sua solicitação.");
+    status.textContent = data.message || "Solicitação enviada com sucesso! Obrigado pelo contato.";
+    status.classList.add("text-green-700");
+    form.reset();
+  } catch (error) {
+    status.textContent = error.message || "Falha de conexão. Tente novamente em instantes.";
+    status.classList.add("text-red-600");
+  } finally {
+    button.disabled = false;
+    button.innerHTML = 'Enviar solicitação <span class="ml-2">↗</span>';
+  }
 });
 </script>
-
 </body>
 </html>
