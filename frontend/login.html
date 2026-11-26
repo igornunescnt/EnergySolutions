@@ -3,51 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login administrativo | EnergySolutions</title>
+  <meta name="theme-color" content="#071426">
+  <title>Acesso administrativo | EnergySolutions</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'DM Sans',sans-serif;background:#071426}
+    h1,.brand{font-family:'Manrope',sans-serif}
+    .focus-ring:focus-visible{outline:3px solid #ffc928;outline-offset:3px}
+  </style>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-gray-100">
-  <main class="w-80 rounded bg-white p-8 shadow">
-    <h1 class="mb-4 text-center text-2xl font-bold">Acesso administrativo</h1>
-    <form id="loginForm">
-      <label class="mb-1 block" for="email">Email</label>
-      <input id="email" type="email" autocomplete="username" required class="mb-3 w-full rounded border p-2">
-      <label class="mb-1 block" for="senha">Senha</label>
-      <input id="senha" type="password" autocomplete="current-password" required class="mb-4 w-full rounded border p-2">
-      <button id="submitButton" type="submit" class="w-full rounded bg-black py-2 text-white">Entrar</button>
-    </form>
-    <p id="msg" role="alert" class="mt-3 text-center text-red-600"></p>
+<body class="min-h-screen text-slate-900">
+  <main class="grid min-h-screen lg:grid-cols-2">
+    <section class="relative hidden overflow-hidden bg-gradient-to-br from-[#102b4a] via-[#0a1d34] to-[#071426] p-12 text-white lg:flex lg:flex-col lg:justify-between">
+      <div class="absolute -right-28 top-1/4 h-96 w-96 rounded-full border-[60px] border-white/5" aria-hidden="true"></div>
+      <a href="index.html" class="brand relative text-2xl font-extrabold">Energy<span class="text-[#ffc928]">Solutions</span></a>
+      <div class="relative max-w-xl">
+        <span class="text-5xl text-[#ffc928]" aria-hidden="true">ϟ</span>
+        <p class="mt-8 text-xs font-extrabold uppercase tracking-[.2em] text-[#ffc928]">Gestão e atendimento</p>
+        <h1 class="mt-4 text-5xl font-extrabold leading-tight">Tudo conectado. Tudo sob controle.</h1>
+        <p class="mt-6 max-w-md text-lg leading-8 text-slate-300">Acesse o ambiente administrativo para acompanhar as solicitações recebidas pela EnergySolutions.</p>
+      </div>
+      <p class="relative text-sm text-slate-500">© 2026 EnergySolutions</p>
+    </section>
+
+    <section class="flex min-h-screen items-center justify-center bg-slate-50 px-5 py-12">
+      <div class="w-full max-w-md">
+        <a href="index.html" class="brand text-xl font-extrabold text-[#071426] lg:hidden">Energy<span class="text-blue-700">Solutions</span></a>
+        <div class="mt-10 rounded-3xl border border-slate-200 bg-white p-7 shadow-xl shadow-slate-900/5 sm:p-10 lg:mt-0">
+          <div class="mb-8">
+            <div class="mb-5 grid h-12 w-12 place-items-center rounded-2xl bg-amber-100 text-2xl text-amber-700" aria-hidden="true">ϟ</div>
+            <p class="text-xs font-extrabold uppercase tracking-[.18em] text-blue-700">Área restrita</p>
+            <h2 class="mt-2 text-3xl font-extrabold tracking-tight text-[#071426]">Bem-vindo de volta.</h2>
+            <p class="mt-3 leading-6 text-slate-500">Entre com suas credenciais administrativas para continuar.</p>
+          </div>
+          <form id="loginForm" class="space-y-5">
+            <div><label class="mb-2 block text-sm font-bold text-slate-700" for="email">E-mail</label><input id="email" type="email" autocomplete="username" required class="focus-ring w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 outline-none transition focus:border-blue-700" placeholder="admin@exemplo.com"></div>
+            <div><div class="mb-2 flex items-center justify-between"><label class="text-sm font-bold text-slate-700" for="senha">Senha</label></div><input id="senha" type="password" autocomplete="current-password" required class="focus-ring w-full rounded-xl border border-slate-300 bg-white px-4 py-3.5 outline-none transition focus:border-blue-700" placeholder="Digite sua senha"></div>
+            <button id="submitButton" type="submit" class="focus-ring w-full rounded-xl bg-[#071426] px-5 py-4 font-extrabold text-white transition hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-60">Entrar no painel <span class="ml-2 text-[#ffc928]">↗</span></button>
+            <p id="msg" role="alert" aria-live="polite" class="min-h-5 text-sm font-semibold text-red-600"></p>
+          </form>
+          <div class="mt-6 border-t border-slate-100 pt-6"><a href="index.html" class="text-sm font-bold text-slate-500 transition hover:text-blue-800">← Voltar ao site</a></div>
+        </div>
+        <p class="mt-6 text-center text-xs text-slate-400">Acesso exclusivo à equipe autorizada.</p>
+      </div>
+    </section>
   </main>
 <script>
 const API_URL = "https://energysolutions-12af.onrender.com";
-
 document.getElementById("loginForm").addEventListener("submit", async (event) => {
   event.preventDefault();
   const button = document.getElementById("submitButton");
   const message = document.getElementById("msg");
   button.disabled = true;
+  button.textContent = "Validando acesso...";
   message.textContent = "";
-
   try {
     const response = await fetch(`${API_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: document.getElementById("email").value,
+        email: document.getElementById("email").value.trim(),
         senha: document.getElementById("senha").value
       })
     });
     const data = await response.json();
-    if (!response.ok || !data.autorizado) {
-      throw new Error(data.error || "Email ou senha inválidos.");
-    }
+    if (!response.ok || !data.autorizado) throw new Error(data.error || "E-mail ou senha inválidos.");
     localStorage.setItem("token", data.token);
     window.location.href = "painel.html";
   } catch (error) {
     message.textContent = error.message || "Não foi possível conectar ao servidor.";
-document.getElementById("senha").value = "";
+    document.getElementById("senha").value = "";
   } finally {
     button.disabled = false;
+    button.innerHTML = 'Entrar no painel <span class="ml-2 text-[#ffc928]">↗</span>';
   }
 });
 </script>
