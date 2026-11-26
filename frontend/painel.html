@@ -3,34 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071426">
   <title>Painel administrativo | EnergySolutions</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'DM Sans',sans-serif;background:#f4f6fa}
+    h1,h2,.brand{font-family:'Manrope',sans-serif}
+    .focus-ring:focus-visible{outline:3px solid #ffc928;outline-offset:3px}
+  </style>
 </head>
-<body class="bg-gray-100 p-6 md:p-10">
-  <header class="mb-6 flex items-center justify-between">
-    <h1 class="text-3xl font-bold">Contatos recebidos</h1>
-    <button id="logoutButton" class="rounded bg-red-600 px-4 py-2 text-white">Sair</button>
+<body class="min-h-screen text-slate-800">
+  <header class="bg-[#071426] text-white shadow-lg">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8">
+      <a href="index.html" class="brand text-xl font-extrabold">Energy<span class="text-[#ffc928]">Solutions</span><span class="ml-2 hidden text-xs font-semibold uppercase tracking-widest text-slate-400 sm:inline">Admin</span></a>
+      <div class="flex items-center gap-3"><span class="hidden text-sm text-slate-400 sm:inline">Área administrativa</span><button id="logoutButton" class="focus-ring rounded-full border border-white/20 px-5 py-2.5 text-sm font-bold transition hover:border-red-400 hover:text-red-300">Sair</button></div>
+    </div>
   </header>
-  <p id="status" role="status" class="mb-4"></p>
-  <main id="lista" class="grid gap-4"></main>
+  <main class="mx-auto max-w-7xl px-5 py-10 lg:px-8 lg:py-14">
+    <div class="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+      <div><p class="text-xs font-extrabold uppercase tracking-[.18em] text-blue-700">Visão geral</p><h1 class="mt-2 text-3xl font-extrabold tracking-tight text-[#071426] sm:text-4xl">Solicitações recebidas</h1><p class="mt-3 text-slate-500">Acompanhe os contatos enviados pelo formulário do site.</p></div>
+      <button id="refreshButton" class="focus-ring inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-slate-700 shadow-sm transition hover:border-blue-700 hover:text-blue-800"><span aria-hidden="true">↻</span> Atualizar lista</button>
+    </div>
+    <section class="mb-8 grid gap-4 sm:grid-cols-2">
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><p class="text-sm font-semibold text-slate-500">Total de solicitações</p><p id="totalContatos" class="mt-2 text-4xl font-extrabold text-[#071426]">—</p></div>
+      <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><p class="text-sm font-semibold text-slate-500">Status do painel</p><div class="mt-3 flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span><p class="font-bold text-emerald-700">Sessão autenticada</p></div><p class="mt-2 text-sm text-slate-400">Conexão com a API EnergySolutions</p></div>
+    </section>
+    <div class="mb-4 flex items-center justify-between"><h2 class="text-lg font-extrabold text-[#071426]">Caixa de entrada</h2><p id="status" role="status" aria-live="polite" class="text-sm text-slate-500"></p></div>
+    <section id="lista" class="grid gap-4" aria-live="polite"></section>
+    <div id="emptyState" class="hidden rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center"><div class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-slate-100 text-2xl text-slate-500" aria-hidden="true">✉</div><h2 class="mt-4 text-lg font-extrabold text-[#071426]">Nenhuma solicitação por enquanto</h2><p class="mt-2 text-sm text-slate-500">Quando alguém enviar o formulário do site, o contato aparecerá aqui.</p></div>
+  </main>
+  <footer class="mt-16 border-t border-slate-200 bg-white py-6"><p class="text-center text-xs text-slate-400">© 2026 EnergySolutions · Painel administrativo</p></footer>
 <script>
 const API_URL = "https://energysolutions-12af.onrender.com";
 const token = localStorage.getItem("token");
+const list = document.getElementById("lista");
+const statusMessage = document.getElementById("status");
+const emptyState = document.getElementById("emptyState");
 
 function logout() {
   localStorage.removeItem("token");
   window.location.href = "login.html";
 }
 document.getElementById("logoutButton").addEventListener("click", logout);
+document.getElementById("refreshButton").addEventListener("click", carregar);
 
-if (!token) {
-  logout();
-} else {
-  carregar();
+if (!token) logout();
+else carregar();
+
+function addText(parent, tag, className, value) {
+  const element = document.createElement(tag);
+  element.className = className;
+  element.textContent = value || "";
+  parent.append(element);
+  return element;
 }
 
 async function carregar() {
-  const status = document.getElementById("status");
+  const refresh = document.getElementById("refreshButton");
+  refresh.disabled = true;
+  refresh.classList.add("opacity-60");
+  statusMessage.textContent = "Atualizando...";
+  emptyState.classList.add("hidden");
   try {
     const response = await fetch(`${API_URL}/contatos`, {
       headers: { Authorization: `Bearer ${token}` }
@@ -39,36 +75,40 @@ async function carregar() {
       logout();
       return;
     }
-    if (!response.ok) throw new Error("Não foi possível carregar os contatos.");
-
+    if (!response.ok) throw new Error("Não foi possível carregar as solicitações.");
     const contatos = await response.json();
-    const lista = document.getElementById("lista");
-    lista.replaceChildren();
-
+    list.replaceChildren();
+    document.getElementById("totalContatos").textContent = contatos.length;
     if (!contatos.length) {
-      status.textContent = "Nenhum contato recebido.";
+      emptyState.classList.remove("hidden");
+      statusMessage.textContent = "Tudo em dia";
       return;
     }
-
     contatos.slice().reverse().forEach((contato) => {
       const card = document.createElement("article");
-      card.className = "rounded bg-white p-5 shadow";
-      const nome = document.createElement("h2");
-      nome.className = "font-bold";
-      nome.textContent = contato.nome || "";
-      const telefone = document.createElement("p");
-      telefone.textContent = contato.telefone || "";
-      const mensagem = document.createElement("p");
-      mensagem.textContent = contato.mensagem || "";
-      const data = document.createElement("p");
-      data.className = "mt-2 text-sm text-gray-500";
-      data.textContent = contato.data ? new Date(contato.data).toLocaleString() : "";
-      card.append(nome, telefone, mensagem, data);
-      lista.append(card);
+      card.className = "rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md sm:p-7";
+      const top = document.createElement("div");
+      top.className = "flex flex-col justify-between gap-3 sm:flex-row sm:items-start";
+      const identity = document.createElement("div");
+      addText(identity, "h3", "text-lg font-extrabold text-[#071426]", contato.nome || "Contato sem nome");
+      addText(identity, "p", "mt-1 text-sm font-semibold text-blue-800", contato.telefone || "Telefone não informado");
+      top.append(identity);
+      const dateText = contato.data ? new Date(contato.data).toLocaleString("pt-BR") : "Data não informada";
+      addText(top, "span", "text-xs font-medium text-slate-400", dateText);
+      card.append(top);
+      const message = document.createElement("div");
+      message.className = "mt-5 rounded-xl bg-slate-50 p-4";
+      addText(message, "p", "mb-1 text-xs font-extrabold uppercase tracking-widest text-slate-400", "Mensagem");
+      addText(message, "p", "whitespace-pre-wrap text-sm leading-7 text-slate-600", contato.mensagem || "Nenhuma mensagem adicional.");
+      card.append(message);
+      list.append(card);
     });
-    status.textContent = "";
+    statusMessage.textContent = `${contatos.length} solicitação(ões)`;
   } catch (error) {
-    status.textContent = error.message || "Erro ao carregar os contatos.";
+    statusMessage.textContent = error.message || "Erro ao carregar as solicitações.";
+  } finally {
+    refresh.disabled = false;
+    refresh.classList.remove("opacity-60");
   }
 }
 </script>
